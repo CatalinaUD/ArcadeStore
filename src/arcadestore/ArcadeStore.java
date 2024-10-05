@@ -1,18 +1,29 @@
 package arcadestore;
 
+import Data.DatabaseReader;
 import arcadestore.models.ArcadeEnums;
-import arcadestore.models.ArcadeEnums.Game_Type;
+import arcadestore.models.ArcadeEnums.ArrowCardinalities_Type;
+import arcadestore.models.ArcadeEnums.Controller_Type;
 import arcadestore.models.ArcadeEnums.Game_Category;
+import arcadestore.models.ArcadeEnums.Glasses_Type;
 import arcadestore.models.ArcadeEnums.Image_Quality;
-import arcadestore.models.ArcadeEnums.Machine_Material;
-import arcadestore.models.ArcadeEnums.Machine_Storage;
+import arcadestore.models.ArcadeEnums.Machine_Color;
+import arcadestore.models.Machine_Material;
+import arcadestore.models.ArcadeEnums.WeaponType;
+import arcadestore.models.ClassicalArcadeMachine;
 import arcadestore.models.Customer;
+import arcadestore.models.DanceRevolution;
 import arcadestore.models.Game;
+import arcadestore.models.IEnumeration;
 import arcadestore.models.Machine;
+import arcadestore.models.RacingMachine;
+import arcadestore.models.ShootingMachine;
+import arcadestore.models.VirtualRealityMachine;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -21,6 +32,7 @@ import java.util.Scanner;
 public class ArcadeStore {
     private static final int YES = 1;
     private static List<Game> allGames;
+    private static List<Machine> presetupMachines;
     private static Scanner sc;
     
     /**
@@ -28,61 +40,193 @@ public class ArcadeStore {
      */
     public static void main(String[] args) {
         Customer customer;
-        List<Machine> machinesList = new ArrayList<>();
+        List<Machine> clientMachines = new ArrayList<>();
         
-        allGames = new ArrayList<>();
         sc = new Scanner(System.in);        
         
+        createPresetupMachines();
         insertGames();
+        
+        //------
         printGreeting();
         System.out.println("\nPlease choose an Arcade Machine to purchase");
         
-        buildMachine(machinesList);
+        printMenu();
+        
+        buildMachine(clientMachines);
         
         customer = createCustomer();
-        customer.setMachines(machinesList);        
+        customer.setMachines(clientMachines);        
         
         System.out.println("\nYour purchase is ready, this is your bill: ");
         billCustomer(customer);
     }
+    
+    /**
+     * Adds all presetup machines to the list of presetupMachines
+     */
+    private static void createPresetupMachines() {
+        presetupMachines = new ArrayList<>();
+        presetupMachines.add(createClassicalArcadeMachine());
+        presetupMachines.add(createDanceRevolutionMachine());
+        presetupMachines.add(createShootingMachine());
+        presetupMachines.add(createRacingMachine());
+        presetupMachines.add(createVirtualRealityMachine());
+    }
+    
+    /**
+     * Creates a {@link VirtualRealityMachine}
+     * @return a {@link VirtualRealityMachine}
+     */
+    private static VirtualRealityMachine createVirtualRealityMachine() {
+        int[] dim = {175, 95, 70}; //height, width, depth
+        Machine.MachineBuilder builder = new Machine.MachineBuilder(4000000, 50,
+                32, ArcadeEnums.Processor_Type.INTEL)
+                .imageQuality(Image_Quality.SD)
+                .powerConsumption(60)
+                .dimensions(dim);
+        VirtualRealityMachine vr = new VirtualRealityMachine(builder);
+        vr.setGlassesType(Glasses_Type.VALVE_INDEX);
+        return vr;
+    }
+        
+     /**
+     * Creates a {@link RacingMachine}
+     * @return a {@link RacingMachine}
+     */
+    private static RacingMachine createRacingMachine() {
+        int[] dim = {170, 85, 80}; //height, width, depth
+        Machine.MachineBuilder builder = new Machine.MachineBuilder(2500000, 30,
+                10, ArcadeEnums.Processor_Type.INTEL)
+                .imageQuality(Image_Quality.SD)
+                .powerConsumption(300)
+                .dimensions(dim);
+        RacingMachine rm = new RacingMachine(builder);
+        rm.setController(Controller_Type.WHEEL);
+        rm.setNumberOfControllers(1);      
+        
+        return rm;
+    }   
+    
+    /**
+     * Creates a {@link ShootingMachine}
+     * @return a {@link ShootingMachine}
+     */
+    private static ShootingMachine createShootingMachine() {
+        int[] dim = {175, 90, 80}; //height, width, depth
+        Machine.MachineBuilder builder = new Machine.MachineBuilder(2700000, 40,
+                20, ArcadeEnums.Processor_Type.RYZEN)
+                .imageQuality(Image_Quality.HD)
+                .powerConsumption(350)
+                .dimensions(dim);
+        
+        ShootingMachine sm = new ShootingMachine(builder);
+        sm.setNumberOfWeapons(2);
+        sm.setBluetooth(true);
+        sm.setWeaponType(WeaponType.LIGHT_GUN);
+                
+        return sm;        
+    }   
+            
+    /**
+     * Creates a {@link DanceRevolution}
+     * @return a {@link DanceRevolution}
+     */
+    private static DanceRevolution createDanceRevolutionMachine() {
+        int[] dim = {180, 100, 200}; //height, width, depth
+        Machine.MachineBuilder builder = new Machine.MachineBuilder(3000000, 60,
+                16, ArcadeEnums.Processor_Type.RYZEN)
+                .imageQuality(Image_Quality.SD)
+                .powerConsumption(200)
+                .dimensions(dim);
+        
+        DanceRevolution dr = new DanceRevolution(builder);
+        dr.setArrowCardinalities(ArrowCardinalities_Type.FULL);
+        
+        return dr;
+    }
+    
+    /**
+     * Creates a {@link ClassicalArcadeMachine}
+     * @return a {@link ClassicalArcadeMachine}
+     */
+    private static ClassicalArcadeMachine createClassicalArcadeMachine() {
+        int[] dim = {170, 65, 80}; //height, width, depth
+        Machine.MachineBuilder builder = new Machine.MachineBuilder(2000000, 25,
+                7, ArcadeEnums.Processor_Type.INTEL)
+                .imageQuality(Image_Quality.SD)
+                .powerConsumption(140)
+                .dimensions(dim);
+        
+        ClassicalArcadeMachine cam = new ClassicalArcadeMachine(builder);
+        return cam;
+    }
+    
+    /**
+     * Prompts the user to select one of the presetup machines
+     * @return selected machine
+     */
+    private static void printPrebuiltMachine() {
+        System.out.println("Select one of the pre-built machines: ");
+        System.out.println("1. Classical Arcade Machine");
+        System.out.println("2. Dance Revolution");
+        System.out.println("3. Shooting Machine");
+        System.out.println("4. Racing Machine");
+        System.out.println("5. Virtual Reality Machine");
+    }
+    
 
     /**
      * Calls all the methods to build a machine
-     * @param machinesList - List to add  the new machines
+     * @param machinesList - List to add the new machines
      * @return 
      */
     private static void buildMachine(List<Machine> machinesList) {
         Machine machine;
         int choice;
         do {
-            printGames(allGames);
-            machine = new Machine();
-            choice = readNumberChoice(allGames.size());
-            machine.setGame(allGames.get(choice - 1));
-
+            List<Game> machineGames;
+            printPrebuiltMachine();
+            choice = readNumberChoice(presetupMachines.size());
+            machine = presetupMachines.get(choice - 1);
+            
             printMaterials();
             choice = readNumberChoice(Machine_Material.values().length);
             machine.setMaterial((Machine_Material) ArcadeEnums.getEnumFromIndex(Machine_Material.values(), choice));
-
-            printStorage();
-            choice = readNumberChoice(Machine_Storage.values().length); 
-            machine.setStorage((Machine_Storage) ArcadeEnums.getEnumFromIndex(Machine_Storage.values(), choice));
-
+            
+            printColors();
+            choice = readNumberChoice(Machine_Color.values().length);
+            machine.setColor((Machine_Color) ArcadeEnums.getEnumFromIndex(Machine_Color.values(), choice));
+            
             printYesNoPromt("\nChoose if you want a battery for your machine:");
             choice = readNumberChoice(2);
             machine.setBattery(choice == YES);
-
-            printImageQuality();
-            choice = readNumberChoice(Image_Quality.values().length);
-            machine.setImageQuality((Image_Quality) ArcadeEnums.getEnumFromIndex(Image_Quality.values(), choice));
-
-            machine.estimatePrice();
-            
-            machinesList.add(machine);
+                   
+            machineGames = selectGamesForMachine(findAllowedCategory(machine));
+            machine.setGameList(machineGames);     
+            machine.estimatePrice();          
+            machinesList.add(machine);   
             
             printYesNoPromt("\nDo you want to add another machine?");
             choice = readNumberChoice(2);
         } while (choice == YES);
+    }
+    
+    
+    public static List<Game> selectGamesForMachine(Game_Category category) {
+        List<Game> selectedGames = new ArrayList<>();
+        List<Game> filteredGames = filterGamesList(allGames, category);
+        int maxSelection = filteredGames.size() < 5 ? filteredGames.size() : 5;
+        System.out.printf("\nEnter the number of games to add to the machine (Max %s)\n",
+                maxSelection);
+        int count = readNumberChoice(maxSelection);
+        do {            
+            printGames(filteredGames, false);
+            int choice = readNumberChoice(maxSelection);
+            selectedGames.add(filteredGames.get(choice - 1));
+            count--;
+        } while (count > 0);
+        return selectedGames;
     }
 
     /**
@@ -102,7 +246,14 @@ public class ArcadeStore {
         printSeparator();
         
         for (Machine machine : customer.getMachines()) {
+            DecimalFormat gameFormater = new DecimalFormat("###,###.00");
             System.out.printf("%2s. %s\n", counter, machine);
+            System.out.println("    Games:");
+            for (Game game : machine.getGameList()) {
+                
+                System.out.printf("    - %-32s $... %10s\n", 
+                        game.getName(), gameFormater.format(game.getPrice()));
+            }
             subTotal += machine.getPrice();
             counter++;
         }
@@ -113,33 +264,15 @@ public class ArcadeStore {
         System.out.println("\n\nNumber of machines: " + customer.getMachines().size());
         System.out.printf("Subtotal : $%14s\n", formater.format(subTotal));
         System.out.printf("Taxes    : $%14s\n", formater.format(taxes));
-        System.out.printf("Total    :  %14s\n", formater.format(total));
+        System.out.printf("Total    : $%14s\n", formater.format(total));
     }
     
     /**
      * Inserts all the games to be sold in to the allGames list
      */
     private static void insertGames() {
-        allGames.add(new Game(Game_Category.FIGHTING, "Mortal Kombat", true, Game_Type.CLASSIC, 2));
-        allGames.add(new Game(Game_Category.SHOOTING, "Doom", true, Game_Type.CLASSIC, 5));
-        allGames.add(new Game(Game_Category.SHOOTING, "Quake", true, Game_Type.CLASSIC, 2));
-        allGames.add(new Game(Game_Category.PLATFORM, "Mario Bros", true, Game_Type.CLASSIC, 4));
-        allGames.add(new Game(Game_Category.FIGHTING, "Street Fighter Alpha 3", true, Game_Type.CLASSIC, 4));
-        allGames.add(new Game(Game_Category.FIGHTING, "Tekken", true, Game_Type.CLASSIC, 3));
-        allGames.add(new Game(Game_Category.PLATFORM, "Sonic the Hedgehog ", false, Game_Type.CLASSIC, 3));
-        allGames.add(new Game(Game_Category.PLATFORM, "Donkey Kong Country", false, Game_Type.CLASSIC, 2));
-        allGames.add(new Game(Game_Category.PLATFORM, "Mega Man X ", false, Game_Type.CLASSIC, 3));
-        allGames.add(new Game(Game_Category.RACING, "Super Mario Kart", true, Game_Type.CLASSIC, 4));
-        allGames.add(new Game(Game_Category.RACING, "Crash Team Racing", true, Game_Type.CLASSIC, 5));
-        allGames.add(new Game(Game_Category.SHOOTING, "Call of Duty", false, Game_Type.MODERN, 7));
-        allGames.add(new Game(Game_Category.SHOOTING, "Overwatch 2", false, Game_Type.MODERN, 6));
-        allGames.add(new Game(Game_Category.SHOOTING, "Fornite", false, Game_Type.MODERN, 4));
-        allGames.add(new Game(Game_Category.FIGHTING, "Super Smash Bros. Ultimate", true, Game_Type.MODERN, 8));
-        allGames.add(new Game(Game_Category.FIGHTING, "Dragon Ball FighterZ ", true, Game_Type.MODERN, 5));
-        allGames.add(new Game(Game_Category.PLATFORM, "Hollow Knight", false, Game_Type.MODERN, 6));
-        allGames.add(new Game(Game_Category.PLATFORM, "Super Mario Odyssey", false, Game_Type.MODERN, 7));
-        allGames.add(new Game(Game_Category.RACING, "Crash Team Racing Nitro-Fueled ", true, Game_Type.MODERN, 5));
-        allGames.add(new Game(Game_Category.RACING, "F1 23", true, Game_Type.MODERN, 7));
+        DatabaseReader db = new DatabaseReader();
+        allGames = db.getGames();        
     }
 
     /**
@@ -172,17 +305,6 @@ public class ArcadeStore {
     }
 
     /**
-     * Prints the image quality to give a user a choice
-     */
-    private static void printImageQuality() {
-        System.out.println("\nChoose a image quality:");
-        for (Image_Quality quality : Image_Quality.values()) {
-            System.out.println(quality.getIndex() + ". " + quality.getValue());
-        }
-        printSeparator();
-    }
-
-    /**
      * Prints a message greeting the user
      */
     private static void printGreeting() {
@@ -190,7 +312,6 @@ public class ArcadeStore {
         System.out.println("||              WELLCOME!!!               ||");
         System.out.println("*------------------------------------------*");
     }
-
     
     /**
      * Prints a Yes/No prompt for the user to choose with a message
@@ -205,39 +326,90 @@ public class ArcadeStore {
     }
 
     /**
-     * Prints the storage to give a user a choice
-     */
-    private static void printStorage() {
-        System.out.println("\nChosse a storage size:");
-        for (Machine_Storage storage : Machine_Storage.values()) {
-            System.out.println(storage.getIndex() + ". " + storage.getValue());
-        }
-        printSeparator();
-    }
-
-    /**
      * Prints the material to give a user a choice
      */
     private static void printMaterials() {
         System.out.println("\nChoose a material:");
-        for (Machine_Material material : Machine_Material.values()) {
-            System.out.println(material.getIndex() +  ". " + material.getValue());
-        }
+        printEnum(Machine_Material.values());
         printSeparator();
+    }
+    
+    private static void printColors()  {
+        System.out.println("\nChoose a colors:");
+        printEnum(Machine_Color.values());
+        printSeparator();
+    }
+    
+    /**
+     * Prints the values of a enum
+     */
+    private static void printEnum(IEnumeration[] values) {
+        for (IEnumeration e: values) {
+            System.out.println(e.getIndex() +  ". " + e.getValue());
+        }
+    }
+    
+    /**
+     * 
+     * @param machine
+     * @return 
+     */
+    private static Game_Category findAllowedCategory(Machine machine) {
+        if (machine instanceof RacingMachine) {
+            return Game_Category.RACING;
+        }
+        
+        if (machine instanceof VirtualRealityMachine) {
+            return Game_Category.VIRTUAL_REALITY;
+        }
+        
+        if (machine instanceof ShootingMachine) {
+            return Game_Category.SHOOTING;
+        }
+        
+        if (machine instanceof DanceRevolution) {
+            return Game_Category.DANCE;
+        }
+        
+        return null;
     }
 
     /**
-     * Prints a list of games to give a user a choice
-     * @param allGames 
+     * 
+     * @param games
+     * @param isSimpleDisplay
+     * @return 
      */
-    private static void printGames(List<Game> allGames) {
+    private static List<Game> printGames(List<Game> games, boolean isSimpleDisplay) {
         System.out.println("\nChoose a game:");
         int counter = 1;
-        for (Game game : allGames) {
-            System.out.printf("%2s. %s\n", counter, game);
+        for (Game game : games) {
+            if(isSimpleDisplay) {
+                System.out.printf("%2s. %s\n", counter, game.showBasicInformation());
+            } else {
+                System.out.printf("%2s. %s\n", counter, game);
+            }
             counter++;
         }
         printSeparator();
+        
+        return games;
+    }
+
+    /**
+     * 
+     * @param allGames
+     * @param filter
+     * @return 
+     */
+    private static List<Game> filterGamesList(List<Game> allGames, Game_Category filter) {
+        List<Game> games;
+        if (filter != null) {
+            games = allGames.stream().filter(g -> g.getCategory() == filter).collect(Collectors.toList());
+        } else {
+            games = allGames;
+        }
+        return games;
     }
     
     /**
@@ -270,4 +442,32 @@ public class ArcadeStore {
     public static void printSeparator() {
         System.out.println("-----------------------------------------------");
     }
+
+    private static void printMenu() {
+        int choice;
+        do {
+            System.out.println("\nMenu");
+            System.out.println("1. See all games");
+            System.out.println("2. See all colors");
+            System.out.println("3. See all meterials");            
+            System.out.println("4. Build a machine");
+            
+            choice = readNumberChoice(4);
+            switch(choice) {
+                case  1:
+                    printGames(allGames, true);
+                    break;
+                case 2:
+                    printEnum(Machine_Color.values());
+                    break;
+                case 3:
+                    printEnum(Machine_Material.values());
+                    break;
+            }
+            
+            printSeparator();           
+        } while (choice != 4);
+    }
+    
+    
 }
