@@ -1,0 +1,28 @@
+Mortal Kombat;Fight;Classic;true;2;80000;1992;John Tobias;John Tobias
+Doom;Shooting;Classic;true;5;80000;1993;John Romero;Adrian Carmack
+Quake;Shooting;Classic;true;2;85000;1996;John Romero;Adrian Carmack
+Mario Bros;Platform;Classic;true;4;95000;1983;Shigeru Miyamoto;Shigeru Miyamoto
+Street Fighter Alpha 3;Fight;Classic;true;4;100000;1998;Noritaka Funamizu;Akira Yasuda
+Tekken;Fight;Classic;true;3;900000;1994;Seiichi Ishii;Seiichi Ishii
+Sonic the Hedgehog;Platform;Classic;false;3;89900;1991;Yuji Naka;Naoto Ohshima
+Donkey Kong Country;Platform;Classic;false;2;85000;1994;Tim Stamper;Kevin Bayliss
+Mega Man X;Platform;Classic;false;3;80000;1993;Keiji Inafune;Keiji Inafune
+Super Mario Kart;Racing;Classic;true;4;100000;1992;Shigeru Miyamoto;Shigeru Miyamoto
+Crash Team Racing;Racing;Classic;true;5;95000;1999;Jason Rubin;Joe Pearson
+Call of Duty;Shooting;Modern;false;7;110000;2003;Michael Schiffer;Justin Thomas
+Overwatch 2;Shooting;Modern;false;6;115000;2022;Michael Chu;Arnold Tsang
+Fornite;Shooting;Modern;false;4;90000;2017;Darren Sugg;Pete Ellis
+Super Smash Bros. Ultimate;Fight;Modern;true;8;120000;2018;Masahiro Sakurai;Yusuke Nakano
+Dragon Ball Fighter Z;Fight;Modern;true;5;100000;2018;Akira Toriyama;Toshiyuki Kameyama
+Hollow Knight;Platform;Modern;false;6;110000;2017;Ari Gibson & William Pellen;Ari Gibson
+Super Mario Odyssey;Platform;Modern;false;7;105000;2017;Kenta Motokura;Sho Murata
+Crash Team Racing Nitro-Fueled;Racing;Modern;true;5;105000;2019;Jason Rubin;Joe Pearson
+F1 23;Racing;Modern;true;7;100000;2023;Codemasters Team;Codemasters Team
+Beat Saber;Virtual Reality;Modern;true;8;110000;2018;Jan Ilavsky;Jan Ilavsky
+The Walkingn Dead;Virtual Reality;Modern;true;9;120000;2020;Robert Kirkman;Skydance Interactive Team
+Arizona Sunshine;Virtual Reality;Modern;true;7;130000;2016;Jaywalkers Interactive;Jaywalkers Interactive Team
+Pistol Whip;Virtual Reality;Modern;true;8;130000;2019;Cloudhead Games Team;Cloudhead Games Team
+Dance Dance Revolution;Dance;Classic;false;5;80000;1998;Konami Team;Konami Team
+Pump It Up;Dance;Classic;false;6;90000;1999;Andamiro Team;Andamiro Team
+Dance Evolution Arcade;Dance;Modern;false;8;100000;2012;Naoki Maeda;Naoki Maeda
+In The Groove;Dance;Classic;false;7;95000;2004;Kyle Ward;Kyle Ward

@@ -11,14 +11,14 @@ public class Customer {
     
     private String name; 
     private String lastname; 
-    private String adress;
+    private String address;
     private String phone;
     private List<Machine> machines; 
     
     public Customer(String name, String lastname, String adress, String phone){
         this.name = name;
         this.lastname = lastname;
-        this.adress = adress;
+        this.address = adress;
         this.phone = phone; 
         this.machines = new ArrayList<>(); //Lista vacía
     }
@@ -40,11 +40,11 @@ public class Customer {
     }
 
     public String getAdress() {
-        return adress;
+        return address;
     }
 
     public void setAdress(String adress) {
-        this.adress = adress;
+        this.address = adress;
     }
 
     public String getPhone() {

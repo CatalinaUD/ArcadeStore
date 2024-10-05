@@ -14,13 +14,24 @@ public class Game {
     private Game_Type type;
     private boolean multiplayer;
     private int nbCoins;
+    private String storyTellingCreator;//?
+    private int year;
+    private String graphicsCreator;
+    private int price;
+   
     
-    public Game(Game_Category category, String name, boolean multiplayer, Game_Type type, int nbCoins) {
+    public Game() {}
+    
+    public Game(Game_Category category, String name, boolean multiplayer, Game_Type type, int nbCoins, int year, String storyTellingCreator, String graphicsCreator,  int price) {
         this.category = category;
         this.multiplayer = multiplayer;
         this.name = name;
         this.type = type;
         this.nbCoins = nbCoins;
+        this.price = price;
+        this.year = year;
+        this.storyTellingCreator = storyTellingCreator;
+        this.graphicsCreator = graphicsCreator;
     }
 
     public String getName() {
@@ -63,9 +74,51 @@ public class Game {
         this.nbCoins = nbCoins;
     }
 
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }    
+
+    public String getStoryTellingCreator() {
+        return storyTellingCreator;
+    }
+
+    public void setStoryTellingCreator(String storyTellingCreator) {
+        this.storyTellingCreator = storyTellingCreator;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public String getGraphicsCreator() {
+        return graphicsCreator;
+    }
+
+    public void setGraphicsCreator(String graphicsCreator) {
+        this.graphicsCreator = graphicsCreator;
+    }
+    
+    public String showBasicInformation() {
+        return String.format("%-32s | %-4s | Category: %-16s | Storytelling Creator: %-30s "
+                + "| Graphics Creator: %-30s", 
+                name,
+                year,
+                category.getValue(),
+                storyTellingCreator,
+                graphicsCreator);
+    }
+    
     @Override
     public String toString() {
-        return String.format("%-32s | Category: %-8s | Type: %-7s | Multiplayer : %-3s | %-2s", 
+        return String.format("%-32s | Category: %-16s | Type: %-7s | Multiplayer : %-3s | %-2s", 
                 name,
                 category.getValue(),
                 type.getValue(),
@@ -73,3 +126,4 @@ public class Game {
                 nbCoins);
     }   
 }
+
